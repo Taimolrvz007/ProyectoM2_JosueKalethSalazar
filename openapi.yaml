@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Mini Blog API
-  description: API REST para administar autores y publicaciones de un Plataforma Blog.
+  description: API REST para administar autores y publicaciones de una Plataforma Blog.
   version: 1.0.0
   contact:
     name: Josue Kaleth Salazar

@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import authorsRouter from './src/routes/authors.routes';
-import postsRouter from './src/routes/posts.routes';
-import { errorHandler } from './src/middleware/errorHandler';
+import authorsRouter from './routes/authors-routes.js';
+import postsRouter from './routes/post-routes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 app.use(express.json());
