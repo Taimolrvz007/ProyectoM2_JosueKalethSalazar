@@ -1,0 +1,291 @@
+openapi: 3.0.3
+info:
+  title: Mini Blog API
+  description: API REST para administar autores y publicaciones de un Plataforma Blog.
+  version: 1.0.0
+  contact:
+    name: Josue Kaleth Salazar
+
+servers:
+  - url: https://proyectom2maximogalvezlanders-production.up.railway.app
+    description: Production server (Railway)
+
+paths:
+
+  /api/authors:
+    get:
+      summary: Obtener todos los autores
+      responses:
+        "200":
+          description: Lista de autores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Author"
+
+    post:
+      summary: Crear un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "201":
+          description: Autor creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: Datos inválidos
+        "409":
+          description: Conflicto (ej: email duplicado)
+
+  /api/authors/{id}:
+    get:
+      summary: Obtener autor por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Autor encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+
+    put:
+      summary: Actualizar autor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "200":
+          description: Autor actualizado
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Autor no encontrado
+
+    delete:
+      summary: Eliminar autor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Autor eliminado
+        "400":
+          description: ID inválido
+        "404":
+          description: Autor no encontrado
+
+  /api/posts:
+    get:
+      summary: Obtener todos los posts
+      responses:
+        "200":
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+
+    post:
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "201":
+          description: Post creado correctamente
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Autor no encontrado
+
+  /api/posts/{id}:
+    get:
+      summary: Obtener post por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: ID inválido
+        "404":
+          description: Post no encontrado
+
+    put:
+      summary: Actualizar post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "200":
+          description: Post actualizado
+        "400":
+          description: Datos inválidos
+        "404":
+          description: Post no encontrado
+
+    delete:
+      summary: Eliminar post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post eliminado
+        "400":
+          description: ID inválido
+        "404":
+          description: Post no encontrado
+
+  /api/post/author/{author_id}:
+    get:
+      summary: Obtener posts de un autor
+      parameters:
+        - in: path
+          name: author_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de posts del autor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: AuthorId inválido
+        "404":
+          description: Posts no encontrados
+
+components:
+  schemas:
+
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Gabriel García Márquez
+        email:
+          type: string
+          example: gabriel@email.com
+        bio:
+          type: string
+          example: Escritor colombiano
+        created_at:
+          type: string
+          format: date-time
+          example: 2026-03-13T10:00:00Z
+
+    AuthorInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Mi primer post
+        content:
+          type: string
+          example: Contenido del post
+        author_id:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          example: 2026-03-13T12:00:00Z
+
+    PostInput:
+      type: object
+      required:
+        - title
+        - content
+        - author_id
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
